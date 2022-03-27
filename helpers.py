@@ -43,6 +43,17 @@ class PortfolioMonitor:
         return self.send_topic_message()
 
 
+    def updatePortfolio1(self,data):
+        for k,v in data.items():
+            # Calculate value for each share
+            if k in self.holdings.keys():
+                self.holdings[k]['value'] = self.holdings[k]['shares']*v
+
+        # When holdings are updated calls the rest of the functions
+        self.updateNAV()
+        return self.send_topic_message()
+
+
     def updateNAV(self):
         """
         Adds all the values of holdings to estimate portfolio value
@@ -52,7 +63,6 @@ class PortfolioMonitor:
         for key in self.holdings.keys():
             total += self.holdings[key]['value']
         self.NAV = round(total,2)
-        print("nav=",self.NAV)
 
 
     def portfolioChange(self):

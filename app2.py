@@ -23,27 +23,40 @@ def prtf_stats(INVESTOR,PORTFOLIO,START_DATE,END_DATE):
     """
     df = spark.read.csv(f"{INVESTOR}_{PORTFOLIO}.csv",header=False,inferSchema=True).toDF('investor','portfolio','nav','change','changepct','time')
     # Solution 1
-    # func = udf(lambda x: datetime.strptime(x,"%d/%m/%Y %H:%M"), DateType())
-    # df.withColumn('date', func(col('time'))).show()
+    func = udf(lambda x: datetime.strptime(x,"%d/%m/%Y %H:%M"), DateType())
+    df.withColumn('date', func(col('time'))).show()
+    df = df.withColumn('date', func(col('time')))
 
     #Solution2
-    df = df.withColumn("date", from_unixtime(unix_timestamp("time",'dd/MM/yyyy HH:mm'),'yyyy-MM-dd').cast(DateType()))
+    #df = df.withColumn("date", from_unixtime(unix_timestamp("time",'dd/MM/yyyy HH:mm'),'yyyy-MM-dd').cast(DateType()))
 
     # Filters the dataframe
     df = df.filter((df.date >= datetime.strptime(START_DATE,"%d/%m/%Y")) & (df.date <= datetime.strptime(END_DATE,"%d/%m/%Y")))
 
     # get all the given stats
     av = df.agg({"nav":"avg"}).alias("av").collect()[0][0]
-    std = df.agg({"nav":"std"}).alias("std").collect()[0][0]
-    min_ = df.agg({"nav":"min"}).alias("min_").collect()[0][0]
-    max_ = df.agg({"nav":"max"}).alias("max_").collect()[0][0]
-    spread = (max_- min_)/av
+    print("Average:", av)
 
-    print("Average:",av)
-    print("STD:",std)
-    print("Min:",min_)
-    print("Max",max_)
-    print("Spread",spread)
+    std = df.agg({"nav":"std"}).alias("std").collect()[0][0]
+    print("STD:", std)
+
+    min_ = df.agg({"nav":"min"}).alias("min_").collect()[0][0]
+    print("Min:", min_)
+
+    max_ = df.agg({"nav":"max"}).alias("max_").collect()[0][0]
+    print("Max", max_)
+
+    try:
+        spread = (max_- min_)/av
+        print("Spread", spread)
+    except TypeError:
+        print("Metrics not available, no data for the given period")
+        pass
+    # and just in case add /0 exception
+    except ZeroDivisionError:
+        print("Currently there are no data, please try again")
+        pass
+
 
 
 

@@ -41,8 +41,7 @@ port_obj = helpers.KafkaPortfolio()
 # Initialize classes for portolio monitoring
 p11 = helpers.PortfolioMonitor("p11",p11,"inv1")
 p12 = helpers.PortfolioMonitor("p12",p12,"inv1")
-partitions = consumer.partitions_for_topic("StockExchange")
-print(partitions)
+
 while True:
     messages = consumer.poll() # kafka obj
     for msg in messages.values():
@@ -66,7 +65,5 @@ while True:
         p2MSG = p12.updatePortfolio(prtf)
         port_obj.send_data(p2MSG)
 
-        partitions = consumer.partitions_for_topic("StockExchange")
-        print(partitions)
         time.sleep(10)  # sleep 10 sec
         consumer.resume()  # Resume to connection from last point seen
