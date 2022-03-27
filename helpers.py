@@ -52,6 +52,7 @@ class PortfolioMonitor:
         for key in self.holdings.keys():
             total += self.holdings[key]['value']
         self.NAV = round(total,2)
+        print("nav=",self.NAV)
 
 
     def portfolioChange(self):
