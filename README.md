@@ -21,7 +21,7 @@ pip install -r requirements.txt
 #### all of the above files should be printing on terminal p** updated as a sign that the system works correctly
 #### consumers are turning into producers and commit data to kafka
 
-# Start consumer of topic portfolios
+# Start consumers of topic portfolios
 1) python3 app1.py # it will create csv files for each investor_portfolio
 2) python3 app1_mongo.py # it will store data in mongodb: {database:portfolio_db,collection:portfolios}
 

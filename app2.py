@@ -1,5 +1,5 @@
-import findspark
-findspark.init()
+#import findspark
+#findspark.init()
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import split,col,udf,from_unixtime,unix_timestamp
