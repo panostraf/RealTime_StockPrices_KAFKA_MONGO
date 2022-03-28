@@ -65,5 +65,5 @@ while True:
         p2MSG = p12.updatePortfolio(prtf)
         port_obj.send_data(p2MSG)
 
-        time.sleep(20)  # sleep 10 sec
+        time.sleep(20)  # sleep 20 sec
         consumer.resume()  # Resume to connection from last point seen
